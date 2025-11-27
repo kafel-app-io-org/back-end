@@ -1,79 +1,176 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Kafel Back-End API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+The **Kafel Back-End** is a Node.js/NestJS API that powers the Kafel donation platform.
+It manages users, campaigns, donations, wallets, and payouts for donors, beneficiaries,
+merchants, and campaign managers.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- 👤 User & role management (admin, donor, merchant, campaign manager, etc.)
+- 💸 Donations, withdrawals, and internal transfers
+- 📦 Campaign creation, management, and reporting
+- 🧾 Transaction history and ledger endpoints
+- 🔐 JWT-based authentication and authorization
+- 🧮 Statistic/analytics endpoints for the admin dashboard
+- 🗄️ Relational database integration (e.g., MySQL / PostgreSQL)
 
-## Installation
+---
 
-```bash
-$ npm install
-```
+## Tech Stack
 
-## Running the app
+- **Runtime:** Node.js
+- **Framework:** NestJS
+- **Database:** MySQL / MariaDB (via TypeORM)
+- **Auth:** JWT / Passport
+- **Validation:** class-validator / class-transformer
 
-```bash
-# development
-$ npm run start
+---
 
-# watch mode
-$ npm run start:dev
+## Getting Started
 
-# production mode
-$ npm run start:prod
-```
+### 1. Prerequisites
 
-## Test
+- Node.js (LTS)
+- npm or yarn
+- MySQL (or compatible DB)
+- (Optional) Docker & docker-compose
+
+### 2. Installation
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+git clone https://github.com/kafel-app-io-org/back-end.git
+cd back-end
+npm install
+# or: yarn install
 ```
 
-## Support
+### 3. Environment Variables
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Create a `.env` file in the root:
 
-## Stay in touch
+```bash
+cp .env.example .env
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Typical variables (adapt to your actual config):
+
+```env
+NODE_ENV=development
+PORT=3000
+
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=secret
+DB_NAME=kafel
+
+JWT_SECRET=super-secret-key
+JWT_EXPIRES_IN=1d
+
+# Optional CORS / URLs
+FRONTEND_URL=http://localhost:5173
+MOBILE_APP_URL=exp://localhost:19000
+```
+
+---
+
+## Database Setup
+
+- Ensure the database exists:
+
+```sql
+CREATE DATABASE kafel CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+- Run migrations (if enabled):
+
+```bash
+npm run typeorm:migration:run
+```
+
+---
+
+## Scripts
+
+```bash
+# Development (watch mode)
+npm run start:dev
+
+# Production build & run
+npm run build
+npm run start:prod
+
+# Testing
+npm run test
+npm run test:e2e
+
+# Lint
+npm run lint
+```
+
+---
+
+## API Documentation
+
+If Swagger is enabled:
+
+- Start the server and open:
+
+```text
+http://localhost:3000/api/docs
+```
+
+to see Swagger UI.
+
+---
+
+## Project Structure (example)
+
+```text
+src/
+  main.ts
+  app.module.ts
+  config/
+  modules/
+    auth/
+    users/
+    wallets/
+    donations/
+    campaigns/
+    merchants/
+    stats/
+```
+
+---
+
+## Deployment
+
+For production, you can:
+
+- Build and run with PM2
+- Or use Docker / docker-compose
+- Or deploy to a cloud provider (AWS, DigitalOcean, etc.)
+
+Example:
+
+```bash
+npm run build
+NODE_ENV=production node dist/main.js
+```
+
+---
+
+## Contributing
+
+1. Fork the repo & clone your fork.
+2. Create a feature branch: `git checkout -b feature/my-feature`.
+3. Add tests for new features.
+4. Submit a Pull Request.
+
+---
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
-
-
-# IMPORTANT
-for the money case I use integers only for 19.99 I store it as 1999 which is more performant and better then the front end can do what ever he wants
-
-"# back-end" 
+Part of the **Kafel** platform. License terms defined by the organization.
