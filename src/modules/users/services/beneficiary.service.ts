@@ -92,6 +92,28 @@ export class BeneficiaryService {
     }
   }
 
+  excelDateToJSDate(serial: number): string {
+    const date = new Date(Math.round((serial - 25569) * 86400 * 1000));
+    return date.toISOString().split('T')[0];
+  }
+
+  async createManyFromExcel(excel_data: any[], loggedInUser: IUserIdentity) {
+    this.logger.debug({
+      function: 'createManyFromExcel Beneficiaries',
+      loggedInUser,
+    });
+    // const beneficiariesToInsert = [];
+    for (const beneficiary of excel_data) {
+      if (typeof beneficiary.birth_date === 'number') {
+        beneficiary.birth_date = this.excelDateToJSDate(beneficiary.birth_date);
+      }
+      this.createBeneficiary(beneficiary, loggedInUser.id);
+    }
+    return {
+      message: 'beneficiaries creation completed',
+    };
+  }
+
   async findOne(id: number): Promise<Users> {
     this.logger.debug({
       function: 'findAll Beneficiaries',
