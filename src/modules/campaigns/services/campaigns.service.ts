@@ -88,6 +88,7 @@ export class CampaignsService {
         ...createCampaignDto,
         image: imagePath,
       });
+      campaign.total_target = campaign.totalTarget;
       await queryRunner.manager.save(campaign);
 
       const account = await this.accountService.create(

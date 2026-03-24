@@ -63,6 +63,9 @@ export class Campaigns extends AbstractEntity<Campaigns> {
   total_collected: number;
 
   @Column()
+  total_target: number;
+
+  @Column()
   details: string;
 
   @Column()

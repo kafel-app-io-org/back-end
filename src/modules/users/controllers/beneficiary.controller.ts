@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { BeneficiaryService } from '../services/beneficiary.service';
@@ -21,6 +22,8 @@ import RolesGuard from '../../../common/guards/roles.guard';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { UpdateBeneficiaryDto } from '../dto/update-beneficiary.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AddBeneficiaries } from '../dto/upload-excel.dto';
+import * as XLSX from '@e965/xlsx';
 
 @ApiTags('beneficiaries')
 @ApiBearerAuth()
@@ -43,6 +46,24 @@ export class BeneficiaryController {
       user.id,
       file,
     );
+  }
+
+  @Post('add-beneficiaries')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  async uploadExcel(
+    @Body() addBeneficiariesExcel: AddBeneficiaries,
+    @UploadedFile() file: Express.Multer.File,
+    @UserIdentity() user: IUserIdentity,
+  ) {
+    if (!file) {
+      throw new BadRequestException('file should not be empty');
+    }
+    const workbook = XLSX.read(file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(sheet);
+    return this.beneficiaryService.createManyFromExcel(data, user);
   }
 
   @Get(':id')
