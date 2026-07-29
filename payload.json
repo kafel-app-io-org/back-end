@@ -1,0 +1,33 @@
+﻿{
+    "to":  "972599345342",
+    "template":  {
+                     "components":  [
+                                        {
+                                            "type":  "body",
+                                            "parameters":  [
+                                                               {
+                                                                   "text":  "123456",
+                                                                   "type":  "text"
+                                                               }
+                                                           ]
+                                        },
+                                        {
+                                            "parameters":  [
+                                                               {
+                                                                   "text":  "123456",
+                                                                   "type":  "text"
+                                                               }
+                                                           ],
+                                            "sub_type":  "url",
+                                            "type":  "button",
+                                            "index":  "0"
+                                        }
+                                    ],
+                     "name":  "kafelotptemp",
+                     "language":  {
+                                      "code":  "en_US"
+                                  }
+                 },
+    "messaging_product":  "whatsapp",
+    "type":  "template"
+}

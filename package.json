@@ -16,6 +16,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
+    "test:ci": "jest --coverage --ci",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "npx typeorm-ts-node-commonjs",
@@ -28,6 +29,7 @@
   },
   "dependencies": {
     "@e965/xlsx": "^0.20.3",
+    "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^10.0.0",
@@ -37,6 +39,7 @@
     "@nestjs/schedule": "^6.0.0",
     "@nestjs/swagger": "^7.3.1",
     "@nestjs/typeorm": "^10.0.0",
+    "axios": "^1.13.5",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "class-transformer": "^0.5.1",
@@ -91,10 +94,46 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)s",
+      "!**/db/migrations/**",
+      "!**/db/seeders/**",
+      "!**/*.module.ts",
+      "!**/main.ts",
+      "!**/main.old.ts",
+      "!**/*.old.ts",
+      "!**/data-source*.ts",
+      "!**/db/data-source*",
+      "!**/database.providers.ts",
+      "!**/*.d.ts",
+      "!**/i18n/**",
+      "!**/index.ts",
+      "!**/*.config.ts",
+      "!**/test-utils/**"
     ],
     "coverageDirectory": "../coverage",
+    "coverageReporters": [
+      "text",
+      "text-summary",
+      "json",
+      "json-summary",
+      "lcov",
+      "clover"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 90,
+        "branches": 80,
+        "functions": 90,
+        "lines": 90
+      }
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/test-utils/jest.setup.ts"
+    ],
     "testEnvironment": "node"
   }
 }
